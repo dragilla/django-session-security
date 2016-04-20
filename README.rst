@@ -90,7 +90,6 @@ Duplicate your login action in urls to allow an extra parameter (relogin)::
     ...
     url(r'^login/$', 'my_login', name='login'),
     url(r'^login/(?P<relogin>\d+)$', 'my_login', name='login'),
-    ...
 
 Add extra option to you login view::
 
@@ -98,12 +97,14 @@ Add extra option to you login view::
     ...
     
 Pass this extra parameter to template::
+  
     return {
         ...
         'relogin': relogin,
     }
     
 After successful login in your view, redirect the user to close the modal window::
+    
     if the_user_has_logged_in_correctly:
         if relogin == '1':
             return redirect('session_security_after_relogin')
@@ -119,6 +120,7 @@ and that you have to run `collectstatic when using another server
 then you're on your own to manage staticfiles.
 
 After jQuery, add to your base template::
+    
     var sessionSecurity = new yourlabs.SessionSecurity({
         relogin: '{{ SESSION_SECURITY_RELOGIN }}',
         postUrl: '{% url 'my_application:my_login' %}',

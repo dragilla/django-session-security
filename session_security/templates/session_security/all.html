@@ -1,33 +1,19 @@
 {% load session_security_tags %}
-{% load i18n l10n %}
 {% load static from staticfiles %}
 
 {# If the user is not authenticated then there is no session to secure ! #}
 {% if request.user.is_authenticated %}
 
-    {# The modal dialog stylesheet, it's pretty light so it should be easy to hack #}
+    {# The modal dialogs stylesheet, it's pretty light so it should be easy to hack #}
     <link rel="stylesheet" type="text/css" href="{% static 'session_security/style.css' %}">
 
-    {# Include the template that actually contains the modal dialog #}
+    {# Include the template that contains the warning modal dialog #}
     {% include 'session_security/dialog.html' %}
 
-    {# Include the template that actually contains the modal dialog #}
+    {# Include the template that contains the relogin modal dialog #}
     {% include 'session_security/relogin.html' %}
  
     {# Load SessionSecurity javascript 'class', jquery should be loaded - by you - at this point #}
     <script type="text/javascript" src="{% static 'session_security/script.js' %}"></script>
 
-    {# Bootstrap a SessionSecurity instance as the sessionSecurity global variable #}
-    {% localize off %}
-        <script type="text/javascript">
-            var sessionSecurity = new yourlabs.SessionSecurity({
-                relogin: '{{ request|relogin|unlocalize }}',
-                postUrl: '{{ login_url }}',
-                pingUrl: '{% url 'session_security_ping' %}',
-                warnAfter: '{{ request|warn_after|unlocalize }}',
-                expireAfter: '{{ request|expire_after|unlocalize }}',
-                confirmFormDiscard: "{% trans 'You have unsaved changes in a form on this page.' %}"
-            });
-        </script>
-    {% endlocalize %}    
 {% endif %}

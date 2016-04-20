@@ -61,12 +61,5 @@ then you're on your own to manage staticfiles.
 
 After jQuery, add to your base template::
     
-    var sessionSecurity = new yourlabs.SessionSecurity({
-        relogin: '{{ SESSION_SECURITY_RELOGIN }}',
-        postUrl: '{% url 'my_application:my_login' %}',
-        pingUrl: '{% url 'session_security_ping' %}',
-        warnAfter: '{{ SESSION_SECURITY_WARN_AFTER }}',
-        expireAfter: '{{ SESSION_SECURITY_EXPIRE_AFTER }}',
-        confirmFormDiscard: "{% trans 'You have unsaved changes in a form on this page.' %}"
-    });
-    {% include 'session_security/all.html' %}
+    {% url 'my_app:my_login' as post_url %}
+    {% include 'session_security/all.html' with post_url=post_url %}

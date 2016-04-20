@@ -1,14 +1,15 @@
 {% load session_security_tags %}
 {% load static from staticfiles %}
+{% load i18n l10n %}
 
 {# If the user is not authenticated then there is no session to secure ! #}
 {% if request.user.is_authenticated %}
 
     {# hidden inputs to store values for the "after_relogin" template #}
-    <input type="hidden" value="" id="relogin" name="relogin" />
-    <input type="hidden" value="" id="post_url" name="post_url" />
-    <input type="hidden" value="" id="warn_after" name="warn_after" />
-    <input type="hidden" value="" id="expire_after" name="expire_after" />
+    <input type="hidden" value="" id="relogin" name="relogin" value="{{ request|relogin|unlocalize }}" />
+    <input type="hidden" value="" id="post_url" name="post_url" value="{{ post_url }}" />
+    <input type="hidden" value="" id="warn_after" name="warn_after" value="{{ request|warn_after|unlocalize }}" />
+    <input type="hidden" value="" id="expire_after" name="expire_after" value="{{ request|expire_after|unlocalize }}" />
 
     {# The modal dialogs stylesheet #}
     <link rel="stylesheet" type="text/css" href="{% static 'session_security/style.css' %}">
@@ -22,4 +23,18 @@
     {# Load SessionSecurity javascript 'class', jquery should be loaded - by you - at this point #}
     <script type="text/javascript" src="{% static 'session_security/script.js' %}"></script>
 
+    {# Bootstrap a SessionSecurity instance as the sessionSecurity global variable #}
+    {% localize off %}
+        <script type="text/javascript">
+            var sessionSecurity = new yourlabs.SessionSecurity({
+                relogin: "{{ request|relogin|unlocalize }}",
+                postUrl: "{{ post_url }}",
+                pingUrl: '{% url 'session_security_ping' %}',
+                warnAfter: {{ request|warn_after|unlocalize }},
+                expireAfter: {{ request|expire_after|unlocalize }},
+                confirmFormDiscard: "{% trans 'You have unsaved changes in a form of this page.' %}"
+            });
+        </script>
+    {% endlocalize %}  
+    
 {% endif %}

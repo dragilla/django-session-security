@@ -54,10 +54,6 @@ yourlabs.SessionSecurity.prototype = {
         
         if (this.relogin) {
             // provide password to extend session
-            $('#post_url').val(this.postUrl);
-            $('#warn_after').val(this.warnAfter);
-            $('#expire_after').val(this.expireAfter);
-            $('#relogin').val(this.relogin);
             this.$warning.hide('slow');
             this.$relogin_iframe.attr('src', this.postUrl + '1');
             this.$relogin.fadeIn('slow');  

@@ -2,11 +2,11 @@
 <script type="text/javascript">
     window.parent.document.getElementById('session_security_relogin').style.display = 'none';
     var sessionSecurity = new window.parent.yourlabs.SessionSecurity({
-        relogin: 1,
-        postUrl: '/distributor/seller_login/',
-        pingUrl: '/session_security/ping/',
-        warnAfter: 3,
-        expireAfter: 4,
+        relogin: window.parent.document.getElementById('relogin').value,
+        postUrl: window.parent.document.getElementById('post_url').value,
+        pingUrl: '{% url 'session_security_ping' %}',
+        warnAfter: window.parent.document.getElementById('warn_after').value,
+        expireAfter: window.parent.document.getElementById('expire_after').value,
         confirmFormDiscard: "{% trans 'You have unsaved changes in a form on this page.' %}"
     });
     try {

@@ -4,7 +4,13 @@
 {# If the user is not authenticated then there is no session to secure ! #}
 {% if request.user.is_authenticated %}
 
-    {# The modal dialogs stylesheet, it's pretty light so it should be easy to hack #}
+    {# hidden inputs to store values for the "after_relogin" template #}
+    <input type="hidden" value="" id="relogin" name="relogin" />
+    <input type="hidden" value="" id="post_url" name="post_url" />
+    <input type="hidden" value="" id="warn_after" name="warn_after" />
+    <input type="hidden" value="" id="expire_after" name="expire_after" />
+
+    {# The modal dialogs stylesheet #}
     <link rel="stylesheet" type="text/css" href="{% static 'session_security/style.css' %}">
 
     {# Include the template that contains the warning modal dialog #}

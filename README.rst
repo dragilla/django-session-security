@@ -4,6 +4,8 @@ This app provides a mechanism to logout inactive authenticated users. An
 inactive browser should be logged out automatically if the user left his
 workstation, to protect sensitive data that may be displayed in the browser. It
 may be useful for CRMs, intranets, and such projects.
+In addition this app lets you log in again and continue your work where you left 
+off.
 
 For example, if the user leaves for a coffee break, this app can force logout
 after say 5 minutes of inactivity.
@@ -52,6 +54,14 @@ the PingView response.
 Same goes to expire after ``settings.SESSION_SECURITY_EXPIRE_AFTER`` seconds.
 Javascript will first make an ajax request to PingView to ensure that another
 more recent activity was not detected anywhere else - in any other browser tab.
+
+If the app is configured to let the user login again after session timeout (to 
+continue his work) then pre-logout the user session is backuped up and restored
+quickly after logout. This way he can continue his work as if the session never
+expired. For the relogin mechanism the same login action (view and template) is
+used as for normal login. The login window opens on top of the working application. The
+user operates on it normally - using same security mechanisms as with the normal
+login. Then after login the modal window is closed.
 
 Requirements
 ------------

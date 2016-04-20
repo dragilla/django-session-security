@@ -4,6 +4,8 @@ This app provides a mechanism to logout inactive authenticated users. An
 inactive browser should be logged out automatically if the user left his
 workstation, to protect sensitive data that may be displayed in the browser. It
 may be useful for CRMs, intranets, and such projects.
+In addition this app lets you log in again and continue your work where you left 
+off.
 
 For example, if the user leaves for a coffee break, this app can force logout
 after say 5 minutes of inactivity.
@@ -53,6 +55,82 @@ Same goes to expire after ``settings.SESSION_SECURITY_EXPIRE_AFTER`` seconds.
 Javascript will first make an ajax request to PingView to ensure that another
 more recent activity was not detected anywhere else - in any other browser tab.
 
+If the app is configured to let the user login again after session timeout (to 
+continue his work) then pre-logout the user session is backuped up and restored
+quickly after logout. This way he can continue his work as if the session never
+expired. For the relogin mechanism the same login action (view and template) is
+used as for normal login. The login window opens on top of the working application. The
+user operates on it normally - using same security mechanisms as with the normal
+login. Then after login the modal window is closed.
+
+How to install ?
+----------------
+Install the package::
+
+    pip install -e git+git://github.com/dragilla/django-session-security.git@beta#egg=django-session-security==master
+
+For static file service, add to ``settings.INSTALLED_APPS``::
+
+    'session_security',
+
+Add to ``settings.MIDDLEWARE_CLASSES``, **after** django's AuthenticationMiddleware::
+
+    'session_security.middleware.SessionSecurityMiddleware',
+
+Ensure settings.TEMPLATE_CONTEXT_PROCESSORS has::
+
+    'django.core.context_processors.request'
+
+Add to urls::
+
+    url(r'session_security/', include('session_security.urls')),
+
+Duplicate your login action in urls to allow an extra parameter (relogin)::
+
+    ...
+    url(r'^login/$', 'my_login', name='login'),
+    url(r'^login/(?P<relogin>\d+)$', 'my_login', name='login'),
+
+Add extra option to you login view::
+
+    def my_login(request, relogin=0):
+    ...
+    
+Pass this extra parameter to template::
+  
+    return {
+        ...
+        'relogin': relogin,
+    }
+    
+After successful login in your view, redirect the user to close the modal window::
+    
+    if the_user_has_logged_in_correctly:
+        if relogin == '1':
+            return redirect('session_security_after_relogin')
+        ...
+    
+At this point, we're going to assume that you have `django.contrib.staticfiles
+<https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/>`_ working.
+This means that `static files are automatically served with runserver
+<https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#runserver>`_,
+and that you have to run `collectstatic when using another server
+<https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#collectstatic>`_
+(fastcgi, uwsgi, and whatnot). If you don't use django.contrib.staticfiles,
+then you're on your own to manage staticfiles.
+
+After jQuery, add to your base template::
+    
+    var sessionSecurity = new yourlabs.SessionSecurity({
+        relogin: '{{ SESSION_SECURITY_RELOGIN }}',
+        postUrl: '{% url 'my_application:my_login' %}',
+        pingUrl: '{% url 'session_security_ping' %}',
+        warnAfter: '{{ SESSION_SECURITY_WARN_AFTER }}',
+        expireAfter: '{{ SESSION_SECURITY_EXPIRE_AFTER }}',
+        confirmFormDiscard: "{% trans 'You have unsaved changes in a form on this page.' %}"
+    });
+    {% include 'session_security/all.html' %}
+
 Requirements
 ------------
 
@@ -65,24 +143,6 @@ Requirements
 Resources
 ---------
 
-You could subscribe to the mailing list ask questions or just be informed of
-package updates.
-
 - `Git graciously hosted
-  <https://github.com/yourlabs/django-session-security/>`_ by `GitHub
+  <https://github.com/dragilla/django-session-security/>`_ by `GitHub
   <http://github.com>`_,
-- `Documentation graciously hosted
-  <http://django-session-security.rtfd.org>`_ by `RTFD
-  <http://rtfd.org>`_,
-- `Package graciously hosted
-  <http://pypi.python.org/pypi/django-session-security/>`_ by `PyPi
-  <http://pypi.python.org/pypi>`_,
-- `Mailing list graciously hosted
-  <http://groups.google.com/group/yourlabs>`_ by `Google
-  <http://groups.google.com>`_
-- `Continuous integration graciously hosted
-  <http://travis-ci.org/yourlabs/django-session-security>`_ by `Travis-ci
-  <http://travis-ci.org>`_
-
-.. Continuous integration graciously hosted by Travis:
-.. http://travis-ci.org/yourlabs/django-session-security

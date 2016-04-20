@@ -6,9 +6,7 @@ because your time matters and you probably have other things to worry about.
 
 Install the package::
 
-    pip install django-session-security
-    # or the development version
-    pip install -e git+git://github.com/yourlabs/django-session-security.git#egg=django-session-security
+    pip install -e git+git://github.com/dragilla/django-session-security.git@beta#egg=django-session-security==master
 
 For static file service, add to ``settings.INSTALLED_APPS``::
 
@@ -26,6 +24,32 @@ Add to urls::
 
     url(r'session_security/', include('session_security.urls')),
 
+Duplicate your login action in urls to allow an extra parameter (relogin)::
+
+    ...
+    url(r'^login/$', 'my_login', name='login'),
+    url(r'^login/(?P<relogin>\d+)$', 'my_login', name='login'),
+    ...
+
+Add extra option to you login view::
+
+    def my_login(request, relogin=0):
+    ...
+    
+Pass this extra parameter to template::
+    
+    return {
+        ...
+        'relogin': relogin,
+    }
+    
+After successful login in your view, redirect the user to close the modal window::
+    
+    if the_user_has_logged_in_correctly:
+        if relogin == '1':
+            return redirect('session_security_after_relogin')
+        ...
+    
 At this point, we're going to assume that you have `django.contrib.staticfiles
 <https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/>`_ working.
 This means that `static files are automatically served with runserver
@@ -36,5 +60,13 @@ and that you have to run `collectstatic when using another server
 then you're on your own to manage staticfiles.
 
 After jQuery, add to your base template::
-
+    
+    var sessionSecurity = new yourlabs.SessionSecurity({
+        relogin: '{{ SESSION_SECURITY_RELOGIN }}',
+        postUrl: '{% url 'my_application:my_login' %}',
+        pingUrl: '{% url 'session_security_ping' %}',
+        warnAfter: '{{ SESSION_SECURITY_WARN_AFTER }}',
+        expireAfter: '{{ SESSION_SECURITY_EXPIRE_AFTER }}',
+        confirmFormDiscard: "{% trans 'You have unsaved changes in a form on this page.' %}"
+    });
     {% include 'session_security/all.html' %}

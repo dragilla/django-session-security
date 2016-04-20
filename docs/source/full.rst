@@ -46,6 +46,18 @@ session_security/all.html
 .. literalinclude:: ../../session_security/templates/session_security/all.html
    :language: django
 
+session_security/after_relogin.html
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. literalinclude:: ../../session_security/templates/session_security/after_relogin.html
+   :language: django
+   
+session_security/relogin.html
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. literalinclude:: ../../session_security/templates/session_security/relogin.html
+   :language: django
+      
 Static files
 ------------
 

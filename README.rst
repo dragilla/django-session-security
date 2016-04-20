@@ -143,9 +143,6 @@ Requirements
 Resources
 ---------
 
-You could subscribe to the mailing list ask questions or just be informed of
-package updates.
-
 - `Git graciously hosted
-  <https://github.com/yourlabs/django-session-security/>`_ by `GitHub
+  <https://github.com/dragilla/django-session-security/>`_ by `GitHub
   <http://github.com>`_,

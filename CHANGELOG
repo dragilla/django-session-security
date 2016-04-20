@@ -1,3 +1,10 @@
+0.9.2
+
+    - forked main master and started working on a version that supports 
+      relogin after session timeout
+      
+===============================================================================
+
 2.3.2
 
     - #58: Allow for custom expiration based on request (#65) by @mjschultz

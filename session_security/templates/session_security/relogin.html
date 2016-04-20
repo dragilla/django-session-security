@@ -1,0 +1,12 @@
+{% load i18n %}
+{% load login_form_tag %}
+<div id="session_security_relogin" class="session_security" style="display:none">
+    <div class="session_security_overlay"></div>
+    <div class="session_security_relogin">
+        <span style="float:right"><a href="">{% trans "close" %} [x]</a></span><br/>
+        <h3>{% trans 'Your session has expired' %}</h3>
+        <p>{% trans 'Please login again to continue where you left off' %}</p>
+        <iframe id='relogin_iframe' name='relogin_iframe' src="" scrolling="no"></iframe>
+    </div>
+</div>
+

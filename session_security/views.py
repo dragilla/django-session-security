@@ -3,9 +3,11 @@ import time
 
 from datetime import datetime, timedelta
 
+from annoying.decorators import render_to
 from django.contrib import auth
 from django.views import generic
 from django import http
+from django.middleware.csrf import rotate_token, get_token
 
 from .utils import get_last_activity
 
@@ -26,3 +28,11 @@ class PingView(generic.View):
         last_activity = get_last_activity(request.session)
         inactive_for = (datetime.now() - last_activity).seconds
         return http.HttpResponse(inactive_for)
+
+
+@render_to('session_security/after_relogin.html')
+def session_security_after_relogin(request):
+    rotate_token(request)
+    return {
+        'token': get_token(request)
+    }

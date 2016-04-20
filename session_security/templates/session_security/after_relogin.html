@@ -1,0 +1,17 @@
+{% load i18n %}
+<script type="text/javascript">
+    window.parent.document.getElementById('session_security_relogin').style.display = 'none';
+    var sessionSecurity = new window.parent.yourlabs.SessionSecurity({
+        relogin: 1,
+        postUrl: '/distributor/seller_login/',
+        pingUrl: '/session_security/ping/',
+        warnAfter: 3,
+        expireAfter: 4,
+        confirmFormDiscard: "{% trans 'You have unsaved changes in a form on this page.' %}"
+    });
+    try {
+        window.parent.document.getElementsByName("csrfmiddlewaretoken")[0].value = "{{token}}";
+    } catch (ex) {
+        console.log('Exception trying to rotate token: ' + ex);
+    }
+</script>

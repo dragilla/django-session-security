@@ -9,13 +9,20 @@ To install this middleware, add to your ``settings.MIDDLEWARE_CLASSES``::
 Make sure that it is placed **after** authentication middlewares.
 """
 
+import logging
 from datetime import datetime, timedelta
 
 from django.contrib.auth import logout
 from django.core.urlresolvers import reverse
+from django.conf import settings
 
-from .utils import get_last_activity, set_last_activity
-from .settings import EXPIRE_AFTER, PASSIVE_URLS
+from .utils import (
+    get_last_activity,
+    set_last_activity,
+)
+from .settings import EXPIRE_AFTER, PASSIVE_URLS, RELOGIN
+
+logger = logging.getLogger(settings.LOGGING_NAME)
 
 
 class SessionSecurityMiddleware(object):
@@ -31,6 +38,12 @@ class SessionSecurityMiddleware(object):
         """Return time (in seconds) before the user should be logged out."""
         return EXPIRE_AFTER
 
+    def get_relogin(self, request):
+        """Return boolean value of relogin parameter (should we ask the user
+        to try and login again instead of loggin out.
+        """
+        return RELOGIN
+
     def process_request(self, request):
         """ Update last activity time or logout. """
         if not request.user.is_authenticated():
@@ -42,7 +55,12 @@ class SessionSecurityMiddleware(object):
         delta = now - get_last_activity(request.session)
         expire_seconds = self.get_expire_seconds(request)
         if delta >= timedelta(seconds=expire_seconds):
+            old_session = dict(request.session)
             logout(request)
+            for key in old_session:
+                if key[0] != '_':
+                    request.session[key] = old_session[key]
+                request.session.save()
         elif not self.is_passive_request(request):
             set_last_activity(request.session, now)
 

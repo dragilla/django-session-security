@@ -19,6 +19,8 @@ yourlabs.SessionSecurity = function(options) {
     // **HTML element** that should show to warn the user that his session will
     // expire.
     this.$warning = $('#session_security_warning');
+    this.$relogin = $('#session_security_relogin');
+    this.$relogin_iframe = $('#session_security_relogin iframe');
 
     // Last recorded activity datetime.
     this.lastActivity = new Date();
@@ -49,12 +51,23 @@ yourlabs.SessionSecurity.prototype = {
     // Called when there has been no activity for more than expireAfter
     // seconds.
     expire: function() {
-        this.expired = true;
-        if (this.returnToUrl !== undefined) {
-            window.location.href = this.returnToUrl;
-        }
+        
+        if (this.relogin) {
+            // provide password to extend session
+            this.$warning.hide('slow');
+            this.$relogin_iframe.attr('src', this.postUrl + '1');
+            this.$relogin.fadeIn('slow');  
+        } 
         else {
-            window.location.reload();
+            this.expired = true;
+            // just logout
+            if (this.returnToUrl !== undefined) {
+            
+                window.location.href = this.returnToUrl;
+            } 
+            else {
+                window.location.reload();
+            }
         }
     },
     
@@ -90,6 +103,9 @@ yourlabs.SessionSecurity.prototype = {
 
     // Hit the PingView with the number of seconds since last activity.
     ping: function() {
+        if (this.$relogin.is(":visible")) { 
+            return;
+        } 
         var idleFor = Math.floor((new Date() - this.lastActivity) / 1000);
 
         $.ajax(this.pingUrl, {

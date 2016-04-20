@@ -16,6 +16,10 @@ PASSIVE_URLS
     it should not be used to update the user's last activity datetime.
     Overridable in ``settings.SESSION_SECURITY_PASSIVE_URLS``.
 
+RELOGIN
+    Show we ask for password and try to login again and continue out work,
+    or just log out.
+
 Note that this module will raise a warning if
 ``settings.SESSION_EXPIRE_AT_BROWSER_CLOSE`` is not True, because it makes no
 sense to use this app with ``SESSION_EXPIRE_AT_BROWSER_CLOSE`` to False.
@@ -32,9 +36,12 @@ EXPIRE_AFTER = getattr(settings, 'SESSION_SECURITY_EXPIRE_AFTER', 600)
 
 WARN_AFTER = getattr(settings, 'SESSION_SECURITY_WARN_AFTER', 540)
 
+RELOGIN = getattr(settings, 'SESSION_SECURITY_RELOGIN', False)
+
 PASSIVE_URLS = getattr(settings, 'SESSION_SECURITY_PASSIVE_URLS', [])
 PASSIVE_URLS += [
     urlresolvers.reverse('session_security_ping'),
+    urlresolvers.reverse('session_security_after_relogin'),
 ]
 
 if not getattr(settings, 'SESSION_EXPIRE_AT_BROWSER_CLOSE', False):

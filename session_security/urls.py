@@ -19,12 +19,10 @@ try:
 except ImportError:
     from django.conf.urls.defaults import url
 
-from .views import PingView
+from .views import PingView, session_security_after_relogin
 
 urlpatterns = [
-    url(
-        'ping/$',
-        PingView.as_view(),
-        name='session_security_ping',
-    )
+    url('ping/$', PingView.as_view(), name='session_security_ping',),
+    url('after_relogin/$', session_security_after_relogin,
+        name='session_security_after_relogin',)
 ]

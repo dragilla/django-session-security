@@ -5,7 +5,7 @@
         <span style="float:right"><a href="">{% trans "close" %} [x]</a></span><br/>
         <h3>{% trans 'Your session has expired' %}</h3>
         <p>{% trans 'Please login again to continue where you left off' %}</p>
-        <iframe id='relogin_iframe' name='relogin_iframe' src="" scrolling="no"></iframe>
+        <iframe id='relogin_iframe' name='relogin_iframe' src="" data-post-url="{{post_url}}" scrolling="no"></iframe>
     </div>
 </div>
 

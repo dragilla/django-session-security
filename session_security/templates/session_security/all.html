@@ -5,12 +5,6 @@
 {# If the user is not authenticated then there is no session to secure ! #}
 {% if request.user.is_authenticated %}
 
-    {# hidden inputs to store values for the "after_relogin" template #}
-    <input type="hidden" value="" id="relogin" name="relogin" value="{{ request|relogin|unlocalize }}" />
-    <input type="hidden" value="" id="post_url" name="post_url" value="{{ post_url }}" />
-    <input type="hidden" value="" id="warn_after" name="warn_after" value="{{ request|warn_after|unlocalize }}" />
-    <input type="hidden" value="" id="expire_after" name="expire_after" value="{{ request|expire_after|unlocalize }}" />
-
     {# The modal dialogs stylesheet #}
     <link rel="stylesheet" type="text/css" href="{% static 'session_security/style.css' %}">
 
@@ -18,7 +12,7 @@
     {% include 'session_security/dialog.html' %}
 
     {# Include the template that contains the relogin modal dialog #}
-    {% include 'session_security/relogin.html' %}
+    {% include 'session_security/relogin.html' with post_url=post_url %}
  
     {# Load SessionSecurity javascript 'class', jquery should be loaded - by you - at this point #}
     <script type="text/javascript" src="{% static 'session_security/script.js' %}"></script>

@@ -34,5 +34,8 @@ class PingView(generic.View):
 def session_security_after_relogin(request):
     rotate_token(request)
     return {
-        'token': get_token(request)
+        'token': get_token(request),
+        'relogin': request.session.get('relogin'),
+        'warn_after': request.session.get('warn_after'),
+        'expire_after': request.session.get('expire_after')
     }

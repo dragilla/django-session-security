@@ -20,7 +20,7 @@ from .utils import (
     get_last_activity,
     set_last_activity,
 )
-from .settings import EXPIRE_AFTER, PASSIVE_URLS, RELOGIN
+from .settings import WARN_AFTER, EXPIRE_AFTER, PASSIVE_URLS, RELOGIN
 
 logger = logging.getLogger(settings.LOGGING_NAME)
 
@@ -60,7 +60,10 @@ class SessionSecurityMiddleware(object):
             for key in old_session:
                 if key[0] != '_':
                     request.session[key] = old_session[key]
-                request.session.save()
+            request.session['warn_after'] = WARN_AFTER
+            request.session['expire_after'] = EXPIRE_AFTER
+            request.session['relogin'] = RELOGIN
+            request.session.save()
         elif not self.is_passive_request(request):
             set_last_activity(request.session, now)
 

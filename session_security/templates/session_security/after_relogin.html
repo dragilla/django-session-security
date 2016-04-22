@@ -1,6 +1,5 @@
 {% load i18n %}
 <script type="text/javascript">
-    window.parent.document.getElementById('session_security_relogin').style.display = 'none';
     var sessionSecurity = new window.parent.yourlabs.SessionSecurity({
         relogin: window.parent.document.getElementById('relogin').value,
         postUrl: window.parent.document.getElementById('post_url').value,
@@ -14,4 +13,5 @@
     } catch (ex) {
         console.log('Exception trying to rotate token: ' + ex);
     }
+    window.parent.document.getElementById('session_security_relogin').style.display = 'none';
 </script>

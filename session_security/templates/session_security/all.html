@@ -12,7 +12,7 @@
     {% include 'session_security/dialog.html' %}
 
     {# Include the template that contains the relogin modal dialog #}
-    {% include 'session_security/relogin.html' with post_url=post_url %}
+    {% include 'session_security/relogin.html' with login_post_url=login_post_url %}
  
     {# Load SessionSecurity javascript 'class', jquery should be loaded - by you - at this point #}
     <script type="text/javascript" src="{% static 'session_security/script.js' %}"></script>
@@ -22,7 +22,7 @@
         <script type="text/javascript">
             var sessionSecurity = new yourlabs.SessionSecurity({
                 relogin: "{{ request|relogin|unlocalize }}",
-                postUrl: "{{ post_url }}",
+                postUrl: "{{ login_post_url }}",
                 pingUrl: '{% url 'session_security_ping' %}',
                 warnAfter: {{ request|warn_after|unlocalize }},
                 expireAfter: {{ request|expire_after|unlocalize }},

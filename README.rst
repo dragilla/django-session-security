@@ -121,8 +121,8 @@ then you're on your own to manage staticfiles.
 
 After jQuery, add to your base template::
     
-    {% url 'my_app:my_login' as post_url %}
-    {% include 'session_security/all.html' with post_url=post_url %}
+    {% url 'my_app:my_login' as login_post_url %}
+    {% include 'session_security/all.html' with login_post_url=login_post_url %}
 
 Requirements
 ------------

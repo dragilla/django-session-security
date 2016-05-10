@@ -56,6 +56,7 @@ class SessionSecurityMiddleware(object):
         expire_seconds = self.get_expire_seconds(request)
         if delta >= timedelta(seconds=expire_seconds):
             old_session = dict(request.session)
+            old_user = request.user
             logout(request)
             for key in old_session:
                 if key[0] != '_':
@@ -63,6 +64,7 @@ class SessionSecurityMiddleware(object):
             request.session['warn_after'] = WARN_AFTER
             request.session['expire_after'] = EXPIRE_AFTER
             request.session['relogin'] = RELOGIN
+            request.session['session_security__previous_user'] = old_user
             request.session.save()
         elif not self.is_passive_request(request):
             set_last_activity(request.session, now)

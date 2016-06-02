@@ -1,3 +1,7 @@
+0.9.4
+    - moved and renamed close to logout
+    - added previous user to template tags
+    
 0.9.3
 
     - moved script loading back to all.html

@@ -4,7 +4,7 @@
     <div class="session_security_relogin">
         <h3>{% trans 'Your session has expired' %}</h3>
         <p>{% trans 'Please login again to continue where you left off' %}</p>
-        <p>{% trans 'or' %}<a class="red" href="">&nbsp;{% trans "LOGOUT" %}&nbsp;</a>{% trans 'to end this session' %}</p>
+        <p>{% trans 'or' %}<a class="red" href="">&nbsp;{% trans "LOGOUT" %}&nbsp;</a>{% trans 'to login as different user' %}</p>
         <iframe id='relogin_iframe' name='relogin_iframe' src="" data-post-url="{{login_post_url}}" scrolling="no"></iframe>
     </div>
 </div>

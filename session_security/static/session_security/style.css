@@ -59,3 +59,7 @@
 .session_security_relogin h3 {
     margin-top: 0px;
 }
+
+a.red {
+    color: red;
+}

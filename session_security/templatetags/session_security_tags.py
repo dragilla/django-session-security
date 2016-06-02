@@ -18,3 +18,8 @@ def warn_after(request):
 @register.filter
 def relogin(request):
     return RELOGIN
+
+
+@register.filter
+def previous_user(request):
+    return request.session['session_security__previous_user']

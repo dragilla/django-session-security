@@ -21,8 +21,9 @@
     {% localize off %}
         <script type="text/javascript">
             var sessionSecurity = new yourlabs.SessionSecurity({
-                relogin: "{{ request|relogin|unlocalize }}",
+                relogin: {% if dont_relogin %}false{% else %}"{{ request|relogin|unlocalize }}"{% endif %},
                 postUrl: "{{ login_post_url }}",
+                {% if dont_redirect %}returnToUrl: undefined,{% endif %}
                 pingUrl: '{% url 'session_security_ping' %}',
                 warnAfter: {{ request|warn_after|unlocalize }},
                 expireAfter: {{ request|expire_after|unlocalize }},

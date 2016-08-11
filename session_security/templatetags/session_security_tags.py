@@ -22,4 +22,4 @@ def relogin(request):
 
 @register.filter
 def previous_user(request):
-    return request.session['session_security__previous_user']
+    return request.session.get('session_security__previous_user', None)
